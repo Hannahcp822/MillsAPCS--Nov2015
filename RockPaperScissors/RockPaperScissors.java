@@ -1,99 +1,95 @@
-
 /**
- * Write a description of class RockPaperScissors here.
+ * RockPaperScissors - Play a game of Rock-Paper-Scissors... User vs. Computer
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Hannah Pang and Bonny Lee 
+ * @version November 16, 2015
  */
 
 import java.util.*;
 
 public class RockPaperScissors
 {
+    
+    // Each number is associated with an item: 0 for Rock, 1 for Paper, 2 for Scissors
+    
     public static String rockPaperScissors (int choice)
     {
         if (choice == 0) {
             return "Rock";
-        }
-        
-        if (choice == 1) {
+        } else if (choice == 1) {
             return "Paper";
+        } else {
+            return "Scissors";
         }
-        
-        return "Scissors";
     }
+    
+    // Computer chooses random number that corresponds to their choice of rock, paper, or scissors
     
     public static String computerChoice ()
     {
-        Random random = new Random();
-        int choice = random.nextInt(3);
+        Random r = new Random();
+        int choice = r.nextInt(3);
         return rockPaperScissors (choice);
     }
     
-    public static String userChoice ()
+    // Prompt user for a number (0, 1,  or 2)
+    // User enters the number that corresponds to the item (rock, paper, or scissors) they want to choose
+    
+    public static String userChoice (Scanner console)
     {
         System.out.print("Enter 0 for Rock, 1 for Paper, 2 for Scissors: ");
-        Scanner console = new Scanner(System.in);
         int choice = console.nextInt();
         return rockPaperScissors (choice);
     }
     
-    // returns -1 if computer wins, 1 if user wins, and 0 if it's a tie
+    // Determines who is the winner of the move
+    // Returns "User" if user wins, "Computer" if computer wins, and "Tie" if it's a tie
     
-    public static int score (String computer, String user)
+    public static String oneMove (String computer, String user)
     {
-        if (computer.equals(user)) {
+        if (computer == user) {
             System.out.println("Computer: " + computer + " and User: " + user + ". It is a tie.");
-            return 0;
-        }
-        
-        if ("Rock".equals(computer)) {
-            if ("Paper".equals(user)) {
+            return "Tie";
+        } else if (computer == "Rock") {
+            if (user == "Paper") {
                 System.out.println("Computer: Rock  User: Paper  You win!");
-                return 1;
-            } 
-            if ("Scissors".equals(user)) {
+                return "User";
+            } else if (user == "Scissors") {
                 System.out.println("Computer: Rock  User: Scissors  Computer wins!");
-                return -1;
+                return "Computer";
             }
-        }
-        
-        if ("Paper".equals(computer)) {
-            if ("Rock".equals(user)) {
+        } else if (computer == "Paper") {
+            if (user == "Rock") {
                 System.out.println("Computer: Paper  User: Rock  Computer wins!");
-                return -1;
-            } 
-            if ("Scissors".equals(user)) {
+                return "Computer";
+            } else if (user == "Scissors") {
                 System.out.println("Computer: Paper  User: Scissors  You win!");
-                return 1;
+                return "User";
             }
-        }
-        
-        if ("Scissors".equals(computer)) {
-            if ("Rock".equals(user)) {
+        } else if (computer == "Scissors") {                                                
+            if (user == "Rock") {
                 System.out.println("Computer: Scissors  User: Rock  You win!");
-                return 1;
-            } 
-            if ("Paper".equals(user)) {
+                return "User";
+            } else if (user == "Paper"){
                 System.out.println("Computer: Scissors  User: Paper  Computer wins!");
-                return -1;
+                return "Computer";
             }
         }
-        
-        return 0;
-    }
+        return "";
+    } 
     
-    // returns who won the game: computer, user, or tie
+    // Keeps track of how many moves the user and computer have each won
+    // Prints out how many moves the computer won, how many moves the user won, and the overall outcome of the game
     
-    public static String game (int numberOfMoves) 
+    public static void playGame (int numberOfMoves, Scanner console) 
     {
         int computerWins = 0;
         int userWins = 0;
         for (int i = 1; i <= numberOfMoves; i++) {
-            int outcome = score(computerChoice(),userChoice());
-            if (outcome == -1) {
+            String outcome = oneMove(computerChoice(),userChoice(console));
+            if (outcome == "Computer") {
                 computerWins++;
-            } else if (outcome == 1) {
+            } else if (outcome == "User") {
                 userWins++;
             }
         }
@@ -101,33 +97,27 @@ public class RockPaperScissors
         System.out.println();
         if (computerWins > userWins) {
             System.out.println("ComputerWins: " + computerWins + "  UserWins: " + userWins + "  Computer wins game!");
-            return "Computer Won";
         } else if (computerWins < userWins) {
             System.out.println("ComputerWins: " + computerWins + "  UserWins: " + userWins + "  User wins game!");
-            return "User Won";
         } else {
             System.out.println("ComputerWins: " + computerWins + "  UserWins: " + userWins + "  It's a tie!");
-            return "Tie";
         }
     }
     
     public static void main(String[] args) 
     {
         Scanner console = new Scanner(System.in);
-        System.out.println("Let's play Rock Paper Scissors!");
+        System.out.println("Rock Paper Scissors!");
         System.out.println();
         System.out.print("How many games do you want to play? ");
         int numberOfGames = console.nextInt();
         System.out.print("How many moves in a game? ");
         int numberOfMoves = console.nextInt();
         System.out.println();
-        String table = "";
         for (int i = 1; i <= numberOfGames; i++) {
             System.out.println("Game #" + i);
-            String gameOutcome = game(numberOfMoves);
-            table += "Game " + i + " Outcome: " + gameOutcome + "\n"; 
+            playGame(numberOfMoves, console);
             System.out.println();
         }
-        System.out.println(table);
     }
 }
