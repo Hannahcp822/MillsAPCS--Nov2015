@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.params=args
+comment0.target=void\ main(java.lang.String[])
+comment1.params=userinput
+comment1.target=java.lang.String\ produceAnswer(java.lang.String)
+comment2.params=userinput
+comment2.target=java.lang.String\ parseInput(java.lang.String)
+comment3.params=operand
+comment3.target=java.lang.String\ printIntegers(java.lang.String)
+comment4.params=operand\ underscoreIndex\ slashIndex
+comment4.target=java.lang.String\ wholeNumber(java.lang.String,\ int,\ int)
+comment5.params=operand\ underscoreIndex\ slashIndex
+comment5.target=java.lang.String\ numerator(java.lang.String,\ int,\ int)
+comment6.params=operand\ slashIndex
+comment6.target=java.lang.String\ denominator(java.lang.String,\ int)
+comment7.params=operator\ whole1\ num1\ denom1\ whole2\ num2\ denom2
+comment7.target=java.lang.String\ calculation(java.lang.String,\ int,\ int,\ int,\ int,\ int,\ int)
+numComments=8
