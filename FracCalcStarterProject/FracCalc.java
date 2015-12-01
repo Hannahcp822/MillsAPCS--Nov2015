@@ -1,3 +1,5 @@
+package FracCalcStarterProject;
+
 /** 
  * Hannah Pang
  * November 30, 2015
@@ -129,24 +131,50 @@ public class FracCalc {
         int newNum1 = whole1 * denom1 + num1;
         int newNum2 = whole2 * denom2 + num2;
         int commonDenom = denom1 * denom2;
+        int numAnswer;
+        int denomAnswer;
         if (operator.equals(" * ")) {
-            int numAnswer = newNum1 * newNum2;
-            int denomAnswer = denom1 * denom2;
-            String answer = numAnswer + "/" + denomAnswer;
-            return answer;
+            numAnswer = newNum1 * newNum2;
+            denomAnswer = denom1 * denom2;
+            // String answer = numAnswer + "/" + denomAnswer;
+            // return answer;
         } else if (operator.equals(" / ")) {
-            int numAnswer = newNum1 * denom2;
-            int denomAnswer = denom1 * newNum2;
-            String answer = numAnswer + "/" + denomAnswer;
-            return answer;
+            numAnswer = newNum1 * denom2;
+            denomAnswer = denom1 * newNum2;
+            // String answer = numAnswer + "/" + denomAnswer;
+            // return answer;
         } else if (operator.equals(" + ")) {
-            int numAnswer = (newNum1 * denom2) + (newNum2 * denom1);
-            String answer = numAnswer + "/" + commonDenom;
+            numAnswer = (newNum1 * denom2) + (newNum2 * denom1);
+            denomAnswer = commonDenom;
+            // String answer = numAnswer + "/" + commonDenom;
+            // return answer;
+        } else {
+            numAnswer = (newNum1 * denom2) - (newNum2 * denom1);
+            denomAnswer = commonDenom;
+            // String answer = numAnswer + "/" + commonDenom;
+            // return answer;
+        }
+        String answer = simplify(numAnswer, denomAnswer);
+        return answer;
+    }
+    
+    public static String simplify(int numAnswer, int denomAnswer) 
+    {
+        int wholeAnswer;
+        int newNumAnswer;
+        int newDenomAnswer;
+        if (numAnswer > denomAnswer) {
+            wholeAnswer = numAnswer / denomAnswer;
+            newNumAnswer = numAnswer % denomAnswer;
+            newDenomAnswer = denomAnswer; 
+        } else if (numAnswer < denomAnswer) {
+            wholeAnswer = 0;
+        } else if (numAnswer == denomAnswer) {
+            String answer = "1";
             return answer;
         } else {
-            int numAnswer = (newNum1 * denom2) - (newNum2 * denom1);
-            String answer = numAnswer + "/" + commonDenom;
-            return answer;
+            return "0";
         }
+        return "0"; 
     }
 }

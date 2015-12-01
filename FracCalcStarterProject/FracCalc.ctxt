@@ -15,4 +15,6 @@ comment6.params=operand\ slashIndex
 comment6.target=java.lang.String\ denominator(java.lang.String,\ int)
 comment7.params=operator\ whole1\ num1\ denom1\ whole2\ num2\ denom2
 comment7.target=java.lang.String\ calculation(java.lang.String,\ int,\ int,\ int,\ int,\ int,\ int)
-numComments=8
+comment8.params=numAnswer\ denomAnswer
+comment8.target=java.lang.String\ simplify(int,\ int)
+numComments=9
