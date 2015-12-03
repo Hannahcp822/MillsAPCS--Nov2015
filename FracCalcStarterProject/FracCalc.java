@@ -158,23 +158,48 @@ public class FracCalc {
         return answer;
     }
     
-    public static String simplify(int numAnswer, int denomAnswer) 
+    public static String simplify(int num, int denom) 
     {
-        int wholeAnswer;
-        int newNumAnswer;
-        int newDenomAnswer;
-        if (numAnswer > denomAnswer) {
-            wholeAnswer = numAnswer / denomAnswer;
-            newNumAnswer = numAnswer % denomAnswer;
-            newDenomAnswer = denomAnswer; 
-        } else if (numAnswer < denomAnswer) {
-            wholeAnswer = 0;
-        } else if (numAnswer == denomAnswer) {
-            String answer = "1";
-            return answer;
+        if (num == denom) {
+            return "1";
+        } else if (denom == 1) {
+            return String.valueOf(num);
+        } else if (num > denom) {
+            return mixedNumber(num, denom);
         } else {
-            return "0";
+            return reduce(num, denom);
         }
-        return "0"; 
+    }
+    
+    public static String mixedNumber(int num, int denom)
+    {
+        int whole = num / denom;
+        num = num % denom;
+        String fraction = reduce(num, denom);
+        String answer = whole + "_" + fraction;
+        return answer;
+    }
+    
+    public static String reduce(int num, int denom)
+    {
+        int factor = gcf(num, denom);
+        num = num / factor;
+        denom = denom / factor;
+        String fraction = num + "/" + denom;
+        return fraction;
+    }
+    
+    public static int gcf(int num, int denom)
+    {
+        int factor = Math.min(num, denom);
+        if (factor < 0) {
+            factor = factor * -1;
+        }
+        while (factor > 0){
+            while (num % factor != 0 && denom % factor != 0) {
+                factor--;
+            }
+        }    
+        return factor;
     }
 }
