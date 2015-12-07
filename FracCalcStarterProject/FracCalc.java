@@ -2,7 +2,7 @@ package FracCalcStarterProject;
 
 /** 
  * Hannah Pang
- * November 30, 2015
+ * December 7, 2015
  * Fractional Calculator 
  */
 
@@ -27,16 +27,12 @@ public class FracCalc {
     
     public static String produceAnswer(String userinput)
     {   
-        // String display = printIntegers(secondOperand);
-        // return display;
-        String output = parseInput(userinput);
-        return output;
+        return parseInput(userinput);
     }
     
     // Breaks up input into three strings: firstOperand, operator, secondOperand
     // Breaks up each operand into three integers (whole, numerator, and denominator)
-    // Calls calculation method
-    // Returns answer from calculation method
+    // Calls calculation method and returns answer from calculation method
     
     public static String parseInput(String userinput)
     {
@@ -57,25 +53,7 @@ public class FracCalc {
         int whole2 = Integer.parseInt(wholeNumber(secondOperand, underscore2, slash2));
         int num2 = Integer.parseInt(numerator(secondOperand, underscore2, slash2)); 
         int denom2 = Integer.parseInt(denominator(secondOperand, slash2));
-        String output = calculation(operator, whole1, num1, denom1, whole2, num2, denom2);
-        return output;
-        // return secondOperand;
-    }
-    
-    // Checkpoint 2
-    // Finds index of the underscore and index of the slash in the operand 
-    // Calls wholeNumber, numerator, and denominator methods to find these components of the operand
-    // Returns a string that consists of the whole number, numerator, and denominator
-    
-    public static String printIntegers(String operand)
-    {
-        int underscoreIndex = operand.indexOf("_");
-        int slashIndex = operand.indexOf("/");
-        String whole = wholeNumber(operand, underscoreIndex, slashIndex);
-        String num = numerator(operand, underscoreIndex, slashIndex);
-        String denom = denominator(operand, slashIndex);
-        String display = ("whole:" + whole + " numerator:" + num + " denominator:" + denom);
-        return display;
+        return calculation(operator, whole1, num1, denom1, whole2, num2, denom2);
     }
     
     // Determines and returns the whole number portion of the operand
@@ -122,41 +100,62 @@ public class FracCalc {
         }
     }
     
+    // Returns error message if there is a 0 in the denominator
     // Makes mixed numbers improper fractions... initializes new numerators for each operand
     // Finds common denominator
-    // Returns answer of appropriate calculation (+,-,*,or /)
+    // Calculates appropriate calculation (+,-,*,or /)
+    // Calls simplify method to simply fractional answers
     
     public static String calculation(String operator, int whole1, int num1, int denom1, int whole2, int num2, int denom2)
     {
-        int newNum1 = whole1 * denom1 + num1;
-        int newNum2 = whole2 * denom2 + num2;
+        if (denom1 == 0 || denom2 == 0) {
+            return "Error";
+        }
+        
+        int newNum1;
+        int newNum2;
+        if (whole1 >= 0) {
+            newNum1 = whole1 * denom1 + num1;
+        } else {
+            newNum1 = (Math.abs(whole1) * denom1 + num1) * -1;
+        }
+        if (whole2 >= 0) {
+            newNum2 = whole2 * denom2 + num2;
+        } else {
+            newNum2 = (Math.abs(whole2) * denom2 + num2) * -1;
+        }
+        
         int commonDenom = denom1 * denom2;
         int numAnswer;
         int denomAnswer;
         if (operator.equals(" * ")) {
             numAnswer = newNum1 * newNum2;
             denomAnswer = denom1 * denom2;
-            // String answer = numAnswer + "/" + denomAnswer;
-            // return answer;
         } else if (operator.equals(" / ")) {
             numAnswer = newNum1 * denom2;
             denomAnswer = denom1 * newNum2;
-            // String answer = numAnswer + "/" + denomAnswer;
-            // return answer;
         } else if (operator.equals(" + ")) {
             numAnswer = (newNum1 * denom2) + (newNum2 * denom1);
             denomAnswer = commonDenom;
-            // String answer = numAnswer + "/" + commonDenom;
-            // return answer;
         } else {
             numAnswer = (newNum1 * denom2) - (newNum2 * denom1);
             denomAnswer = commonDenom;
-            // String answer = numAnswer + "/" + commonDenom;
-            // return answer;
         }
-        String answer = simplify(numAnswer, denomAnswer);
-        return answer;
+
+        if (numAnswer == 0) {
+            return "0";
+        } else {
+            return simplify(numAnswer, denomAnswer);
+        }
     }
+    
+    // Simplifies fractional answer:
+        // Returns 1 is numerator and denominator are the same
+        // Returns numerator is denominator is 1
+        // Returns opposite sign of numerator if denominator is -1
+        // Calls mixedNumber method if numerator is greater than denominator
+        // Calls reduce method if numerator is less than denominator
+    // Returns simplified answer
     
     public static String simplify(int num, int denom) 
     {
@@ -164,42 +163,77 @@ public class FracCalc {
             return "1";
         } else if (denom == 1) {
             return String.valueOf(num);
-        } else if (num > denom) {
+        } else if (denom == -1) {
+            return String.valueOf(num * -1);
+        } else if (Math.abs(num) > Math.abs(denom)) {
             return mixedNumber(num, denom);
         } else {
             return reduce(num, denom);
         }
     }
     
+    // Finds whole number value of the mixed number
+    // Finds new numerator for the fractional part of the mixed number
+    // Calls reduce method to simplify the fractional part of the mixed number
+    // Returns mixedNumber with simplified fractional part
+    
     public static String mixedNumber(int num, int denom)
     {
         int whole = num / denom;
-        num = num % denom;
-        String fraction = reduce(num, denom);
-        String answer = whole + "_" + fraction;
-        return answer;
+        int newNum;
+        if (whole < 0) {
+            newNum = (num % denom) * -1;
+        } else {
+            newNum = num % denom;
+        }
+        
+        if (newNum == 0) {
+            return String.valueOf(whole);
+        } else {
+            String fraction = reduce(newNum, denom);
+            return whole + "_" + fraction;
+        }
     }
+    
+    // Calls gcf method to find greatest common factor
+    // Reduces fraction by diving both numerator and denominator by the gcf
+    // Returns reduced fraction
     
     public static String reduce(int num, int denom)
     {
-        int factor = gcf(num, denom);
-        num = num / factor;
-        denom = denom / factor;
-        String fraction = num + "/" + denom;
-        return fraction;
+        int gcf = gcf(num, denom);
+
+        if (num > 0 && denom < 0) {
+            num = (num / gcf) * -1;
+            denom = (denom / gcf) * -1;
+        } else {
+            num = num / gcf;
+            denom = denom / gcf;
+        }
+        
+        return num + "/" + denom;
     }
+    
+    // Finds greatest common factor of numerator and denominator
+    // Assumes factor is equal to whichever (absolute value) is smaller: numerator or denominator
+    // Divide both numerator and denominator by factor to find remainder
+    // factor decrements by 1 until factor can divide evenly into both numerator and denominator
+    // returns factor as the gcf
     
     public static int gcf(int num, int denom)
     {
-        int factor = Math.min(num, denom);
-        if (factor < 0) {
-            factor = factor * -1;
-        }
-        while (factor > 0){
-            while (num % factor != 0 && denom % factor != 0) {
-                factor--;
+        int factor = Math.min(Math.abs(num), Math.abs(denom));
+        while (factor > 0) {
+            int a = Math.abs(num) % factor;
+            int b = Math.abs(denom) % factor;
+            if (a == 0 && b == 0) {
+                if (num < 0 && denom < 0) {
+                    factor = factor * -1;
+                } 
+                return factor;
             }
-        }    
-        return factor;
+            factor--;
+        }
+        return 1;
     }
 }
